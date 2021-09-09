@@ -1,6 +1,5 @@
 package com.prueba.app_conexion.service.bd;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.prueba.app_conexion.model.HistoricoDispositivo;
@@ -19,8 +18,8 @@ public class HistoricoDispositivoServiceJpa implements IHistoricoDispositivoServ
     private HistoricoDispositivoRepository historicoDispositivoRepo;
 
     @Override
-    public ArrayList<HistoricoDispositivo> buscarHistorialConexiones(String mac_id) {        
-        return (ArrayList<HistoricoDispositivo>) historicoDispositivoRepo.findByMac(mac_id);
+    public List<HistoricoDispositivo> buscarHistorialConexiones(String mac) {        
+        return (List<HistoricoDispositivo>) historicoDispositivoRepo.findByMac(mac);
     }
 
     

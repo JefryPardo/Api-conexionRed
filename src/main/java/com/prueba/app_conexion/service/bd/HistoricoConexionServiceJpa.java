@@ -1,6 +1,5 @@
 package com.prueba.app_conexion.service.bd;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.prueba.app_conexion.model.HistoricoConexion;
@@ -13,15 +12,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Primary
-public class HistoricoConexionServiceJpa implements IHistoricoConexionService{
+public class HistoricoConexionServiceJpa implements IHistoricoConexionService {
 
     @Autowired
     private HistoricoConexionRepository historicoConexionRepo;
 
-
     @Override
-    public ArrayList<HistoricoConexion> buscarHistorialDispositivoConEstaRed(int redId) {
-        return (ArrayList<HistoricoConexion>) historicoConexionRepo.findByRed(redId);
+    public List<HistoricoConexion> buscarHistorialDispositivoConEstaRed(int redId) {
+        return (List<HistoricoConexion>) historicoConexionRepo.findByRed(redId);
     }
     
 }

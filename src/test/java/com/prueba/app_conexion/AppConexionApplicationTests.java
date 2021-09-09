@@ -6,8 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AppConexionApplicationTests {
 
+	
 	@Test
 	void contextLoads() {
+		// Es parte del test
 	}
 
 }

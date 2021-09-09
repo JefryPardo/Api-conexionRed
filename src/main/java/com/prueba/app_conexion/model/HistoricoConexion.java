@@ -2,6 +2,7 @@ package com.prueba.app_conexion.model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,16 +19,25 @@ public class HistoricoConexion {
     private int id;
 
     private int tipo;
-    private String nombre_red;
-    private String tipo_cifrado;
-    private String usuario;
+    
+    @Column(name="nombre_red")
+    private String nombreRed;
+    
+    @Column(name="tipo_cifrado")
+    private String tipoCifrado;
+    
+    private String usuario;    
     private String mac;
     private String ip;
-    private String tipo_dispositivo;
+    
+    @Column(name="tipo_dispositivo")
+    private String tipoDispositivo;
+    
     private String motivo;
     private int red;
-    private Date fecha_creacion;
-
+    
+    @Column(name="fecha_Creacion")
+    private Date fechaCreacion;
     
     public int getId() {
         return id;
@@ -41,17 +51,17 @@ public class HistoricoConexion {
     public void setTipo(int tipo) {
         this.tipo = tipo;
     }
-    public String getNombre_red() {
-        return nombre_red;
+    public String getNombreRed() {
+        return nombreRed;
     }
-    public void setNombre_red(String nombre_red) {
-        this.nombre_red = nombre_red;
+    public void setNombreRed(String nombreRed) {
+        this.nombreRed = nombreRed;
     }
-    public String getTipo_cifrado() {
-        return tipo_cifrado;
+    public String getTipoCifrado() {
+        return tipoCifrado;
     }
-    public void setTipo_cifrado(String tipo_cifrado) {
-        this.tipo_cifrado = tipo_cifrado;
+    public void setTipoCifrado(String tipoCifrado) {
+        this.tipoCifrado = tipoCifrado;
     }
     public String getUsuario() {
         return usuario;
@@ -71,11 +81,11 @@ public class HistoricoConexion {
     public void setIp(String ip) {
         this.ip = ip;
     }
-    public String getTipo_dispositivo() {
-        return tipo_dispositivo;
+    public String getTipoDispositivo() {
+        return tipoDispositivo;
     }
-    public void setTipo_dispositivo(String tipo_dispositivo) {
-        this.tipo_dispositivo = tipo_dispositivo;
+    public void setTipoDispositivo(String tipoDispositivo) {
+        this.tipoDispositivo = tipoDispositivo;
     }
     public String getMotivo() {
         return motivo;
@@ -89,11 +99,14 @@ public class HistoricoConexion {
     public void setRed(int red) {
         this.red = red;
     }
-    public Date getFecha_creacion() {
-        return fecha_creacion;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
-    public void setFecha_creacion(Date fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
-    }   
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    
+      
      
 }

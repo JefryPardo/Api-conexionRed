@@ -1,5 +1,6 @@
 package com.prueba.app_conexion.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,10 +16,17 @@ public class ConexionRed {
     private int id;
     
     private String tipo;
-    private String nombre_red;
-    private String tipo_cifrado;
+    
+    @Column(name="nombre_red")
+    private String nombreRed;
+    
+    @Column(name="tipo_cifrado")
+    private String tipoCifrado;
+    
     private String usuario;
-    private String contrasenia_conexion;
+    
+    @Column(name="contrasenia_conexion")
+    private String contraseniaConexion;
     
     public int getId() {
         return id;
@@ -32,17 +40,17 @@ public class ConexionRed {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    public String getNombre_red() {
-        return nombre_red;
+    public String getNombreRed() {
+        return nombreRed;
     }
-    public void setNombre_red(String nombre_red) {
-        this.nombre_red = nombre_red;
+    public void setNombreRed(String nombreRed) {
+        this.nombreRed = nombreRed;
     }
-    public String getTipo_cifrado() {
-        return tipo_cifrado;
+    public String getTipoCifrado() {
+        return tipoCifrado;
     }
-    public void setTipo_cifrado(String tipo_cifrado) {
-        this.tipo_cifrado = tipo_cifrado;
+    public void setTipoCifrado(String tipoCifrado) {
+        this.tipoCifrado = tipoCifrado;
     }
     public String getUsuario() {
         return usuario;
@@ -50,12 +58,14 @@ public class ConexionRed {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
-    public String getContrasenia_conexion() {
-        return contrasenia_conexion;
+    public String getContraseniaConexion() {
+        return contraseniaConexion;
     }
-    public void setContrasenia_conexion(String contrasenia_conexion) {
-        this.contrasenia_conexion = contrasenia_conexion;
+    public void setContraseniaConexion(String contraseniaConexion) {
+        this.contraseniaConexion = contraseniaConexion;
     }
+    
+   
 
     
 }

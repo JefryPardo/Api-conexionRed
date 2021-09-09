@@ -3,6 +3,7 @@ package com.prueba.app_conexion.service.bd;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.prueba.app_conexion.model.ConexionRed;
@@ -27,8 +28,8 @@ public class ConexionRedServiceJpa implements IConexionRedService{
 
 
     @Override
-    public ArrayList<ConexionRed> buscarTodas() {
-        return (ArrayList<ConexionRed>) conexionRedRepo.findAll();
+    public List<ConexionRed> buscarTodas() {
+        return (List<ConexionRed>) conexionRedRepo.findAll();
     }
 
     @Override
@@ -37,10 +38,16 @@ public class ConexionRedServiceJpa implements IConexionRedService{
     }
 
     @Override
-    public ConexionRed guardar(ConexionRed conexion_red) {
-        return conexionRedRepo.save(conexion_red); 
+    public ConexionRed guardar(ConexionRed conexionRed) {
+        return conexionRedRepo.save(conexionRed); 
     }
 
+    /**
+     * Se encarga de borrar una coenxión de la base de datos, por id
+     * 
+     * @param id Corresponde al id de la conexión a eliminar
+     * @return retorna false en caso de que no sea posible borrar el registro. true en caso contrario.
+     */
     @Override
     public boolean eliminar(Integer id) {
         try {
@@ -55,12 +62,14 @@ public class ConexionRedServiceJpa implements IConexionRedService{
 
     // Redes disponibles //retorna las redes que tienen menos de 3 dispositivos
     @Override
-    public ArrayList<ConexionRed> buscarDisponibles() {
+    public List<ConexionRed> buscarDisponibles() {
         
-        ArrayList<DispositivoElectronico> dispositivos = serviceDispositivoElectronico.buscarTodas();
-		ArrayList<ConexionRed> redes = buscarTodas();
+        List<DispositivoElectronico> dispositivos = serviceDispositivoElectronico.buscarTodas();
+		List<ConexionRed> redes = buscarTodas();
 
-        ArrayList<ConexionRed> newListRed = new ArrayList<ConexionRed>(); 
+        List<ConexionRed> newListRed = new ArrayList<>();
+        
+        System.out.println(newListRed);
 
         for (int i=0;i<redes.size();i++) { 
 			int contador = 0;     

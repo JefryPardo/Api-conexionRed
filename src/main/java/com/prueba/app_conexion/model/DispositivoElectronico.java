@@ -1,5 +1,6 @@
 package com.prueba.app_conexion.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-
 
 @Entity
 @Table( name = "dispositivo_electronico" )
@@ -21,7 +20,9 @@ public class DispositivoElectronico {
 
     private String mac;
     private String tipo;
-    private boolean estado_conexion;
+    
+    @Column(name="estado_conexion")
+    private boolean estadoConexion;
 
     @ManyToOne
     @JoinColumn( name = "conexion")
@@ -62,14 +63,6 @@ public class DispositivoElectronico {
         this.tipo = tipo;
     }
 
-    public boolean isEstado_conexion() {
-        return estado_conexion;
-    }
-
-    public void setEstado_conexion(boolean estado_conexion) {
-        this.estado_conexion = estado_conexion;
-    }
-
     public ConexionRed getConexion() {
         return conexion;
     }
@@ -86,6 +79,12 @@ public class DispositivoElectronico {
         this.ip = ip;
     }
 
-     
+    public boolean isEstadoConexion() {
+        return estadoConexion;
+    }
+
+    public void setEstadoConexion(boolean estadoConexion) {
+        this.estadoConexion = estadoConexion;
+    }     
     
 }

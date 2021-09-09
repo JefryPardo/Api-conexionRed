@@ -2,6 +2,7 @@ package com.prueba.app_conexion.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,11 +20,16 @@ public class HistoricoDispositivo {
     private String mac;
     private String tipo;
     
-    private Date fecha_creacion;
+    @Column(name="fecha_creacion")
+    private Date fechaCreacion;
     private String ip;
 
-    private String nombre_red;
-    private String tipo_cifrado;
+    @Column(name="nombre_red")
+    private String nombreRed;
+    
+    @Column(name="tipo_cifrado")
+    private String tipoCifrado;
+    
     private String usuario;
     private String motivo;
 
@@ -46,30 +52,29 @@ public class HistoricoDispositivo {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
-    public Date getFecha_creacion() {
-        return fecha_creacion;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
-    public void setFecha_creacion(Date fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
     public String getIp() {
         return ip;
     }
     public void setIp(String ip) {
         this.ip = ip;
+    }    
+    public String getNombreRed() {
+        return nombreRed;
     }
-    public String getNombre_red() {
-        return nombre_red;
+    public void setNombreRed(String nombreRed) {
+        this.nombreRed = nombreRed;
     }
-    public void setNombre_red(String nombre_red) {
-        this.nombre_red = nombre_red;
+    public String getTipoCifrado() {
+        return tipoCifrado;
     }
-    public String getTipo_cifrado() {
-        return tipo_cifrado;
-    }
-    public void setTipo_cifrado(String tipo_cifrado) {
-        this.tipo_cifrado = tipo_cifrado;
+    public void setTipoCifrado(String tipoCifrado) {
+        this.tipoCifrado = tipoCifrado;
     }
     public String getUsuario() {
         return usuario;
@@ -82,12 +87,5 @@ public class HistoricoDispositivo {
     }
     public void setMotivo(String motivo) {
         this.motivo = motivo;
-    } 
-
-    
-
-
-
-     
-    
+    }    
 }

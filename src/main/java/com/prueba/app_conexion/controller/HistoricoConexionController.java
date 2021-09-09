@@ -1,6 +1,7 @@
 package com.prueba.app_conexion.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.prueba.app_conexion.model.HistoricoConexion;
 import com.prueba.app_conexion.service.IHistoricoConexionService;
@@ -21,8 +22,8 @@ public class HistoricoConexionController {
 
     
 	@GetMapping("/search/{id}")
-	public ArrayList<HistoricoConexion> buscar(@PathVariable("id") int idRed) {		
-		return (ArrayList<HistoricoConexion>) serviceHistoricoRed.buscarHistorialDispositivoConEstaRed(idRed);
+	public List<HistoricoConexion> buscar(@PathVariable("id") int idRed) {		
+		return (List<HistoricoConexion>) serviceHistoricoRed.buscarHistorialDispositivoConEstaRed(idRed);
 	}
 
 }
