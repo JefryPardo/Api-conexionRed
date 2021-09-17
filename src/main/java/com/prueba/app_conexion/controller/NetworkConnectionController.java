@@ -1,9 +1,7 @@
 package com.prueba.app_conexion.controller;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import com.prueba.app_conexion.config.exception.ErrorResp;
 import com.prueba.app_conexion.dto.NetworkConnectionDto;
 import com.prueba.app_conexion.service.INetworkConnectionService;
@@ -51,7 +49,8 @@ public class NetworkConnectionController {
 	 * @return la network en formato Json si la encuentra, de lo contrario retorna null
 	 */
 	@GetMapping("/{id}")
-	public NetworkConnectionDto searchByIdNetworkConnection(@PathVariable("id") int idNetworkConnection) {		
+	public NetworkConnectionDto searchByIdNetworkConnection(
+		@PathVariable("id") int idNetworkConnection) {		
 		
 		return serviceNetwordConnection.searchById(idNetworkConnection);
 	}

@@ -3,7 +3,7 @@ package com.prueba.app_conexion.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-
+import com.prueba.app_conexion.config.exception.ErrorResp;
 import com.prueba.app_conexion.dto.ElectronicDeviceDto;
 import com.prueba.app_conexion.service.IElectronicDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ElectronicDeviceController {
 	 * Peticion que retorna todos los dispositivos electronicos
 	 * @return lista tipo ElectronicDeviceDto
 	 */
-    @GetMapping("/all")
+    @GetMapping
 	public List<ElectronicDeviceDto> searchElectronicDeviceDtos() {
 
 		return serviceElectronicDevice.searchAll();
@@ -37,8 +37,9 @@ public class ElectronicDeviceController {
 	 * @param electronicDeviceDto
 	 * @return json del objecto que se guardo.
 	 */
-	@PostMapping("/save")
-	public ElectronicDeviceDto saveElectronicDeviceDto(@RequestBody @Valid ElectronicDeviceDto electronicDeviceDto) {
+	@PostMapping
+	public ElectronicDeviceDto saveElectronicDeviceDto(
+		@Valid @RequestBody ElectronicDeviceDto electronicDeviceDto) {
 
 		return	this.serviceElectronicDevice.saveElectronicDevice(electronicDeviceDto);
 	}
@@ -71,7 +72,7 @@ public class ElectronicDeviceController {
 	 * @return 
 	 */
 	@DeleteMapping("/{id}")
-	public boolean borrar(@PathVariable("id") int idDispositivoElectronico) {
+	public ErrorResp borrar(@PathVariable("id") int idDispositivoElectronico) {
 
 		return serviceElectronicDevice.deleteByIdElectronicDevice(idDispositivoElectronico);
 	}

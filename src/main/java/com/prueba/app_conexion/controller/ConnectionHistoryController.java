@@ -1,7 +1,6 @@
 package com.prueba.app_conexion.controller;
 
 import java.util.List;
-
 import com.prueba.app_conexion.dto.ConnectionHistoryDto;
 import com.prueba.app_conexion.service.IConnectionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;

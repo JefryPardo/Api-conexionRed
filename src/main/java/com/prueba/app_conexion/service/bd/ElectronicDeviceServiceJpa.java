@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import com.prueba.app_conexion.config.exception.BadRequestException;
+import com.prueba.app_conexion.config.exception.ErrorResp;
 import com.prueba.app_conexion.config.exception.NotFoundException;
 import com.prueba.app_conexion.dto.ElectronicDeviceDto;
 import com.prueba.app_conexion.dto.NetworkConnectionDto;
@@ -41,16 +42,10 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
 	 */
     @Override
     public ElectronicDeviceDto save(ElectronicDeviceDto electronicDeviceDto) {
-        try {
-
-            ElectronicDevice device = modelMapper.map(electronicDeviceDto, ElectronicDevice.class);
-            device = dispositivoElectronicoRepo.save(device);
+        ElectronicDevice device = modelMapper.map(electronicDeviceDto, ElectronicDevice.class);
+        device = dispositivoElectronicoRepo.save(device);
         
-            return modelMapper.map(device,ElectronicDeviceDto.class);
-        } catch (Exception e) {
-
-            throw new NotFoundException("Error: variables no validas.  error info:"+e.getMessage());
-        } 
+        return modelMapper.map(device,ElectronicDeviceDto.class); 
     }
 
     /**
@@ -62,10 +57,10 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
 
         List<ElectronicDevice> listEleDevice = dispositivoElectronicoRepo.findAll();
 
-        if(listEleDevice.size()==0){
+        if(listEleDevice.size()==0) {
 
             throw new NotFoundException("No se encontro ningun dispositivo1.");
-        }else{
+        }else {
 
             return listEleDevice.stream()
             .map(ElectronicDevice -> modelMapper.map(ElectronicDevice, ElectronicDeviceDto.class))
@@ -82,7 +77,8 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
     public ElectronicDeviceDto searchById(int idDispositivoElectronico) {
         
         Optional<ElectronicDevice> device = dispositivoElectronicoRepo.findById(idDispositivoElectronico);
-        if(device.isPresent()){
+        if(device.isPresent()) {
+
             return modelMapper.map(device.get(), ElectronicDeviceDto.class);
         }
         return null;
@@ -94,16 +90,21 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
 	 * @return el objecto en formato json si lo guarda, de lo contrario retorna los errores presentados
 	 */
     @Override
-    public ElectronicDeviceDto saveElectronicDevice(ElectronicDeviceDto electronicDeviceDto) {        
+    public ElectronicDeviceDto saveElectronicDevice(ElectronicDeviceDto electronicDeviceDto) {
         
-        if(searchMac(electronicDeviceDto.getMac()) == null) {
+        List<ElectronicDeviceDto> allElectronicDeviceDtos = searchDevices();
+        if(allElectronicDeviceDtos.size() == 0) {
 
-            List<NetworkConnectionDto> listNetworks = serviceNetwordConnection.availableNetworks();
-            if(available(listNetworks, electronicDeviceDto)) {
-                if(electronicDeviceDto.getTypeDevice().equals("smartphone") && electronicDeviceDto.getConnection().getTypeConnection() == 1) {
-                    
-                    List<ElectronicDeviceDto> allElectronicDeviceDtos = searchDevices();
-                    if(allElectronicDeviceDtos.size()>0){
+            return save(electronicDeviceDto);
+        }else {
+
+            if(availableMac(electronicDeviceDto)) { 
+
+                List<NetworkConnectionDto> listNetworks = serviceNetwordConnection.availableNetworks();
+                if(available(listNetworks, electronicDeviceDto)) {
+
+                    if(fieldsValid(electronicDeviceDto)) {
+                        
                         if(permittedSmartphone(allElectronicDeviceDtos, electronicDeviceDto)) {
                         
                             return save(electronicDeviceDto);
@@ -111,31 +112,50 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
         
                             throw new BadRequestException("La red tipo wifi solo permite un dispositivo tipo smartphone");
                         }
-                    }else{
-                        
+                    }else {
+        
                         return save(electronicDeviceDto);
                     }
                 }else {
-    
-                    return save(electronicDeviceDto);
+        
+                    throw new BadRequestException("red no valida o disponible.");
                 }
             }else {
     
-                throw new BadRequestException("red no valida o disponible.");
+                throw new BadRequestException("Mac no disponible.");  
             }
-        }else {
-
-            throw new BadRequestException("Mac no disponible.");  
         }
     }
+
+    /**
+     * Valida si el objecto electronicDeviceDto de tipo ElectronicDeviceDto en sus campos getTypeDevice = smartphone &&  getConnection.getTypeConnection == 1
+     * @param electronicDeviceDto
+     * @return true si la condicion se da, de lo contrario false
+     */
+    public boolean fieldsValid(ElectronicDeviceDto electronicDeviceDto) {
+
+        return (electronicDeviceDto.getTypeDevice().equals("smartphone") && electronicDeviceDto.getConnection().getTypeConnection() == 1);
+    }
+
+    /**
+     * validad si el dispositivo a guardar tiene una mac validad y no repetida
+     * @param electronicDeviceDto
+     * @return  retorna true si la mac es validad, de lo contrario false
+     */
+    public boolean availableMac(ElectronicDeviceDto electronicDeviceDto) {
+
+        return (searchMac(electronicDeviceDto.getMac()) == null);
+    }
     
+    /**
+     * Busca todos los dispositivos de la entidad ElectronicDevice y retorna una lista de tipo List<ElectronicDeviceDto>, puede estar vacia
+     * @return List<ElectronicDeviceDto>
+     */
     public List<ElectronicDeviceDto> searchDevices() {
 
-        List<ElectronicDevice> listEleDevice = dispositivoElectronicoRepo.findAll();
+        List<ElectronicDevice> listDevices = dispositivoElectronicoRepo.findAll();
 
-        return listEleDevice.stream()
-        .map(ElectronicDevice -> modelMapper.map(ElectronicDevice, ElectronicDeviceDto.class))
-        .collect(Collectors.toList());
+        return mapperConverter(listDevices);
     }
 
     /**
@@ -159,19 +179,24 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
 	 * @return el objecto en formato json si lo encuentra, de lo contrario retorna null
 	 */
     @Override
-    public boolean deleteByIdElectronicDevice(Integer idElectronicDevice) {
+    public ErrorResp deleteByIdElectronicDevice(Integer idElectronicDevice) {
+
         try {
+
             dispositivoElectronicoRepo.deleteById(idElectronicDevice);  
-            return true;
+                return new ErrorResp("Con exito.","Se pudo borrar el dispositivo electronico con id: "+idElectronicDevice,"200 OK");
         } catch (Exception e) {
-            return false;
+
+            return new ErrorResp("Sin exito","No se pudo borrar el dispositivo electronico con id: "+idElectronicDevice,"404 Not Found");
         } 
     } 
     
     /**
-	 * metodo requerido en el save, se validad sí la network tiene un dispositovo tipo smartphone asociado
-	 * @param allElectronicDeviceDtos electronicDeviceDto
-	 * @return el metodo se llama permite smartphone ? retorna false ó true
+	 * Método requerido en el save, se validad sí la network tiene un dispositovo tipo smartphone 
+     * asociado
+     * 
+	 * @param allElectronicDeviceDtos electronicDeviceDto Corresponde al listado completo de dispositivos elecctrónicos.
+	 * @return 
 	 */
     public boolean permittedSmartphone(List<ElectronicDeviceDto> allElectronicDeviceDtos, ElectronicDeviceDto electronicDeviceDto) {
 
@@ -185,7 +210,9 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
     }
 
     /**
-	 * busca si la network ingresada esta en la lista listNetworks, con esto nos damos cuenta que la network esta disponible si retorna true
+	 * Busca si la network ingresada esta en la lista listNetworks, con esto nos damos cuenta que 
+     * la network esta disponible si retorna true
+     * 
 	 * @param allElectronicDeviceDtos electronicDeviceDto
 	 * @return true si se encuntra, de lo contrario false
 	 */
@@ -200,18 +227,30 @@ public class ElectronicDeviceServiceJpa implements IElectronicDeviceService {
         return false;
     }
 
+    /**
+     * 
+     */
     @Override
     public List<ElectronicDeviceDto> searchByConnection(int idConnection) {
 
         List<ElectronicDevice> listDevices = dispositivoElectronicoRepo.findAllByConnectionIdConnection(idConnection);       
         if(listDevices.size()==0){
 
-            throw new NotFoundException("No se encontro ningun dispositivo2.");
+            throw new NotFoundException("No se encontro ningun dispositivo.");
         }else{
 
-            return listDevices.stream()
-            .map(ElectronicDevice -> modelMapper.map(ElectronicDevice, ElectronicDeviceDto.class))
-            .collect(Collectors.toList());
+            return mapperConverter(listDevices);
         }
-    }    
+    }
+    
+    /**
+     * Convierte una lista tipo ElectronicDevice a una de tipo ElectronicDeviceDto
+     * @param listDevices
+     * @return List<ElectronicDeviceDto>
+     */
+    public List<ElectronicDeviceDto> mapperConverter(List<ElectronicDevice> listDevices) {
+        return listDevices.stream()
+        .map(ElectronicDevice -> modelMapper.map(ElectronicDevice, ElectronicDeviceDto.class))
+        .collect(Collectors.toList()); 
+    }
 }

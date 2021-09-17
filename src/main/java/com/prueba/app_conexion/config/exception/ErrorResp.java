@@ -6,14 +6,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ErrorResp {
+    // Cambiar nombre ErrorResp
     
-    private String Error;
+    private String response;
     private String message;
-    private String state;
+    private String status;
 
-    public ErrorResp(String Error, String message, String state) {
-        this.Error = Error;
+    public ErrorResp(String response, String message, String status) {
+        this.response = response;
         this.message = message;
-        this.state = state;
+        this.status = status;
     }
 }

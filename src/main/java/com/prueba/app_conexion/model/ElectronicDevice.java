@@ -24,29 +24,29 @@ public class ElectronicDevice {
     @Column(name="id_device")
     private int idDevice;
 
-    @NotBlank(message = "Se requiere una mac validad.")
-    @NotNull(message = "mac no puede ser null.")
+    @NotBlank(message = "Mac: No validad.")
+    @NotNull(message = "Mac: No validad.")
     private String mac;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "typeDevice: No valido.")
+    @NotNull(message = "typeDevice: No valido.")
     @Column(name="type_device")
     private String typeDevice;  
 
-    @NotNull
+    @NotNull(message = "connectionStatus: No valido.")
     @Column(name="connection_status")
     private boolean connectionStatus;
 
-    @NotNull
+    @NotNull(message = "connection: No valido.")
     @ManyToOne
     @JoinColumn( name = "connection")
     private NetworkConnection connection;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "ip: No valido.")
+    @NotNull(message = "ip: No valido.")
     private String ip;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "brand: No valido.")
+    @NotNull(message = "brand: No valido.")
     private String brand;
 }
